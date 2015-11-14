@@ -83,4 +83,59 @@ public class Game : MonoBehaviour {
 		CurrentPlayerNumber = (CurrentPlayerNumber + 1) % NumPlayers;
 		BeginNewTurn();
 	}
+
+	public RectTransform SetSpawningUnitUI;
+	public RectTransform SetSpawningUnitLabel;
+	public RectTransform SetSpawningUnitType;
+
+	public TrackingCollection tracker;
+	public Unit spawningUnit;
+	private void SetSpawningUnit(Unit u)
+	{
+		spawningUnit = u;
+		spawningUnit.State = Unit.States.TypeNotSetYet;
+		spawningUnit.Owner = Players[CurrentPlayerNumber];
+		SetSpawningUnitLabel.gameObject.SetActive(false);
+		SetSpawningUnitType.gameObject.SetActive(true);
+	}
+
+	public void BeginSpawnUnit()
+	{
+		InGameUI.gameObject.SetActive(false);
+		SetSpawningUnitUI.gameObject.SetActive(true);
+		SetSpawningUnitLabel.gameObject.SetActive(true);
+		SetSpawningUnitType.gameObject.SetActive(false);
+		tracker.FindNextUnusedTracker(SetSpawningUnit);
+	}
+
+	public void SpawnSoldier ()
+	{
+		SetSpawningUnitState (Unit.States.Soldier);
+	}
+
+	public void SpawnScout ()
+	{
+		SetSpawningUnitState (Unit.States.Scout);
+	}
+
+	public void SpawnBomb ()
+	{
+		SetSpawningUnitState (Unit.States.Bomb);
+	}
+
+	public void SpawnCannon()
+	{
+		SetSpawningUnitState (Unit.States.Cannon);
+	}
+
+	public void SetSpawningUnitState(Unit.States type)
+	{
+		spawningUnit.State = type;
+		spawningUnit.OnSpawned();
+		Players[CurrentPlayerNumber].OnSpawnedUnit(spawningUnit);
+
+		SetSpawningUnitUI.gameObject.SetActive(false);
+
+		EndCurrentPlayerTurn();
+	}
 }
