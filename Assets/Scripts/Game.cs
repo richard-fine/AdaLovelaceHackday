@@ -53,6 +53,9 @@ public class Game : MonoBehaviour {
 	{
 		GetReadyScreen.gameObject.SetActive(true);
 		GetReadyLabel.text = "Player " + (CurrentPlayerNumber + 1);	
+
+		foreach(var obj in tracker.GetComponentsInChildren<Unit>())
+			obj.OnPlayerChanged(Players[CurrentPlayerNumber]);
 	}
 
 	public UnityEngine.UI.Text CurrentPlayerLabel;

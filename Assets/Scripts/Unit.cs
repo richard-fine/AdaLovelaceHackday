@@ -45,4 +45,10 @@ public class Unit : MonoBehaviour {
 		ActiveInstance.transform.localPosition = Vector3.zero;
 		ActiveInstance.transform.localRotation = Quaternion.identity;
 	}
+
+	public void OnPlayerChanged(Player p)
+	{
+		if (ActiveInstance)
+			ActiveInstance.gameObject.SetActive(p == Owner);
+	}
 }
